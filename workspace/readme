@@ -1,0 +1,101 @@
+=== Readme ===
+This project has been developed in Eclipse on Linux.
+
+
+********** INSTALL **********
+___________________
+_____ Eclipse _____
+
+- Install Maven in Eclipse (this helps to manage the dependencies of the libraries).
+  > In Eclipse: "Help" > "Install New Software..."
+  > Fill the "Work with" field with: http://download.eclipse.org/technology/m2e/releases
+  > Click on "Add..."
+  > Tick "m2e - Maven Integration for Eclipse"
+  > Click on "Next >" and follow the process
+
+- Import the project in Eclipse
+  > During the launch of Eclipse, select the "workspace" directory from the git repository
+  > In Eclipse: "File" > "New" > "Project..."
+  > Select "Project" (in General)
+  > Fill the "Project name" field with: code
+  > Click on "Finish"
+
+All the libraries and files are ready!
+
+------------
+> Optional <
+If you want to start the project from scratch:
+
+- Create a new Maven project in Eclipse
+
+- Install the required libraries with Maven by adding the following lines in the pom.xml file after "</build>":
+  <dependencies>
+   <dependency>
+    <groupId>org.seleniumhq.selenium</groupId>
+    <artifactId>selenium-firefox-driver</artifactId>
+    <version>2.40.0</version>
+   </dependency>
+   <dependency>
+    <groupId>dnsjava</groupId>
+    <artifactId>dnsjava</artifactId>
+    <version>2.1.6</version>
+   </dependency>
+   <dependency>
+    <groupId>com.fasterxml.jackson.core</groupId>
+    <artifactId>jackson-databind</artifactId>
+    <version>2.3.2</version>
+   </dependency>
+   <dependency>
+    <groupId>com.google.guava</groupId>
+    <artifactId>guava</artifactId>
+    <version>16.0.1</version>
+   </dependency>
+   <dependency>
+    <groupId>org.xerial</groupId>
+    <artifactId>sqlite-jdbc</artifactId>
+    <version>3.7.15-M1</version>
+   </dependency>
+  </dependencies>
+
+- Download HarLib (from https://sites.google.com/site/frogthinkerorg/projects/harlib) and add harlib-jackson-xxx.jar to the classpath.
+
+- Download Apache Commons CLI (from http://commons.apache.org/proper/commons-cli/) and add commons-cli-xx.jar to the classpath.
+
+How to add a library to the classpath in Eclipse:
+> Right click on the project => Properties.
+> Select "Java Build Path" on the left => click on the "Libraries" tab => click on "Add External JARs..." and select the jar files downloaded before.
+
+___________________
+_____ Firefox _____
+
+- Create a new profile in Firefox (2 methods):
+  1) With GUI
+     > firefox -P
+  2) Without GUI
+     > firefox -CreateProfile <profile>
+
+- Run Firefox in order to create the files of your profile
+  > firefox -P <profile>
+
+- Install Firebug: https://getfirebug.com/
+
+- Install NetExport: https://getfirebug.com/wiki/index.php/Firebug_Extensions#NetExport
+  > Edit the files of the extension (see section below).
+
+
+_____ NetExport _____
+- In your Firefox profile (home/XXX/.mozilla/firefox/YYY/extensions), find netexport@getfirebug.com.xpi
+- Open the archive
+- Edit the file /chrome/content/netexport/harBuilder.js (see note 1 below)
+  > Comment the lines 200 ("if (!timings._timeStamps)") to 211 ("});")
+- Edit the file /chrome/content/netexport/automation.js (see note 2 below)
+  > Modify the line: var fileName = [...] to var fileName = name;
+
+--- Why ? ---
+Note 1: these lines generate a field that is not standard in the HAR spec and makes HarLib to detect the files as corrupted.
+Note 2: with this modification, the filename of the generated files is only composed of the hostname (without the date).
+
+
+********** RUN **********
+Launch "java -jar Code.jar" followed by your arguments.
+Note: launch "java -jar Code.jar -h" to get help and the list of arguments.
